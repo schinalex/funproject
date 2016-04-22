@@ -10,25 +10,39 @@ for (var i = 0; i < 10; i++) {
 }
 
 var validate = function (matrix) {
-  var direction = ''
   for (var i = 0; i < matrix.length; i++) {
     for (var j = 0; j < matrix.length; j++) {
-      if (matrix[i][j] === 1) {
-        direction = checkDirection(matrix, i, j)
-        console.log(direction)
-        checkAround(matrix, i, j, direction)
-        matrix[i][j] = 2
-      }
+      findShip()
     }
   }
 }
 
 validate(a)
 
+var findShip = function (matrix, i, j) {
+  var direction = ''
+  if (matrix[i][j] === 1) {
+    direction = checkDirection(matrix, i, j)
+    console.log(direction)
+    switch (direction) {
+      case 'East':
+        findShip(matrix, i, j + 1)
+        break
+      case 'North':
+        findShip(matrix, i + 1, j)
+        break
+      default:
+
+    }
+    checkAround(matrix, i, j, direction)
+    matrix[i][j] = 2
+  }
+}
+
 var checkDirection = function (matrix, i, j) {
-  if (matrix[i][j + 1]) {
+  if (matrix[i][j + 1] === 1) {
     return 'East'
-  } else if (matrix[i - 1][j]) {
+  } else if (matrix[i - 1][j] === 1) {
     return 'South'
   }
 }
