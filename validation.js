@@ -4,7 +4,7 @@ var a = []
 for (var i = 0; i < 10; i++) {
   var b = []
   for (var j = 0; j < 10; j++) {
-    b.push(Math.floor(Math.random()))
+    b.push(Math.round(Math.random()))
   }
   a.push(b)
 }
@@ -12,30 +12,34 @@ for (var i = 0; i < 10; i++) {
 var validate = function (matrix) {
   for (var i = 0; i < matrix.length; i++) {
     for (var j = 0; j < matrix.length; j++) {
-      findShip()
+      if (matrix[i][j] === 1) {
+        findShip(matrix, i, j)
+      }
     }
   }
 }
 
-validate(a)
-
 var findShip = function (matrix, i, j) {
   var direction = ''
+  direction = checkDirection(matrix, i, j)
+  console.log(direction)
   if (matrix[i][j] === 1) {
-    direction = checkDirection(matrix, i, j)
-    console.log(direction)
     switch (direction) {
       case 'East':
         findShip(matrix, i, j + 1)
         break
-      case 'North':
+      case 'South':
         findShip(matrix, i + 1, j)
         break
       default:
-
+        console.log('no direction')
     }
-    checkAround(matrix, i, j, direction)
+  }
+  if (checkAround(matrix, i, j, direction)) {
+    console.log('valid')
     matrix[i][j] = 2
+  } else {
+    console.log('invalid')
   }
 }
 
@@ -49,12 +53,16 @@ var checkDirection = function (matrix, i, j) {
 
 var checkAround = function (matrix, i, j, direction) {
   var valid = true
-  for (var y = -1; y < 2; y++) {
-    for (var x = -1; x < 2; x++) {
-      if (!(x === 0 && y === 0)) {
-        if (!(direction === 'East' && x === 1 && y === 0 || direction === 'South' && x === 0 && y === 1)) {
-          if (matrix[i + y][j + x]) {
-            valid = false
+  if (i < 1 || j < 0 || i > matrix.length - 2 || j > matrix.length - 2) {
+    console.log('edges')
+  } else {
+    for (var y = -1; y < 2; y++) {
+      for (var x = -1; x < 2; x++) {
+        if (!(x === 0 && y === 0)) {
+          if (!(direction === 'East' && x === 1 && y === 0 || direction === 'South' && x === 0 && y === 1)) {
+            if (matrix[i + y][j + x]) {
+              valid = false
+            }
           }
         }
       }
@@ -62,3 +70,5 @@ var checkAround = function (matrix, i, j, direction) {
   }
   return valid
 }
+
+validate(a)
