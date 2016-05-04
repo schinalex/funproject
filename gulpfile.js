@@ -8,13 +8,12 @@ var folder = require('gulp-folder')
 var babel = require('gulp-babel')
 var browserSync = require('browser-sync').create()
 var reload = browserSync.reload
-// var dependencies = ['./node_modules/angular/angular.min.js',
-//                     './node_modules/angular-aria/angular-aria.min.js',
-//                     './node_modules/angular-animate/angular-animate.min.js',
-//                     './node_modules/angular-material/angular-material.min.js',
-//                     './node_modules/angular-material/angular-material.min.css',
-//                     './node_modules/angular-messages/angular-messages.min.js',
-//                     'node_modules/ng-draggable/ngDraggable.js']
+var dependencies = ['./node_modules/angular/angular.min.js',
+                    './node_modules/angular-aria/angular-aria.min.js',
+                    './node_modules/angular-animate/angular-animate.min.js',
+                    './node_modules/angular-material/angular-material.min.js',
+                    './node_modules/angular-material/angular-material.min.css',
+                    './node_modules/angular-messages/angular-messages.min.js']
 
 gulp.task('serve', function () {
   browserSync.init({
@@ -59,11 +58,11 @@ gulp.task('mincss', function () {
     .pipe(gulp.dest('./app/css'))
 })
 
-// gulp.task('vendors', function () {
-//   gulp.src(dependencies)
-//     // I'll do something later... maybe
-//     .pipe(gulp.dest('./app/vendors/'))
-// })
+gulp.task('vendors', function () {
+  gulp.src(dependencies)
+    // I'll do something later... maybe
+    .pipe(gulp.dest('./app/vendors/'))
+})
 
 gulp.task('fw', function () {
   folder({
@@ -71,8 +70,8 @@ gulp.task('fw', function () {
     folders: {
       css: './css',
       js: './js',
-      img: './img'
-      // vendors: './vendors'
+      img: './img',
+      vendors: './vendors'
     }
   })
 })
@@ -86,4 +85,4 @@ gulp.task('watch', function () {
   gulp.watch('./src/img/*', ['img'])
 })
 
-gulp.task('default', ['fw', 'serve', 'sass', 'babel', 'html', 'img',/* 'vendors',*/ 'watch'])
+gulp.task('default', ['fw', 'serve', 'sass', 'babel', 'html', 'img', 'vendors', 'watch'])

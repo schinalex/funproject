@@ -21,12 +21,14 @@ var a, b, c, d;
 
 function printShips()
 {
-	for (var i = 1; i <= 10; i++)
-	{
-		console.log("\n");
-		for (var j = 1; j <= 10; j++)
-			console.log(field[i][j]);
-	}
+
+  console.log(field)
+// 	for (var i = 1; i <= 10; i++)
+// 	{
+// 		console.log('');
+// 		for (var j = 1; j <= 10; j++)
+// 			console.log(field[i][j]);
+// 	}
 }
 
 function checkErrors()
@@ -241,7 +243,6 @@ function totalCheck()
 }
 function main()
 {
-	readShip();
 	printShips();
 	if (totalCheck() == succes)
 		console.log("\n\nsucces\n\n");
@@ -251,3 +252,4 @@ function main()
 
 	return 0;
 }
+main()
