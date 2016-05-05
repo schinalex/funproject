@@ -1,0 +1,10 @@
+.box {
+  width: 2.5em;
+  height: 2.5em;
+  margin: 0.1em; }
+
+.selected {
+  background-color: green; }
+
+.inputs {
+  margin-top: 7vh; }

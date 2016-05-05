@@ -1,22 +1,23 @@
 'use strict'
 
-var a = []
-for (var i = 0; i < 10; i++) {
-  var b = []
-  for (var j = 0; j < 10; j++) {
-    b.push(Math.round(Math.random()))
-  }
-  a.push(b)
-}
+// var a = []
+// for (var i = 0; i < 10; i++) {
+//   var b = []
+//   for (var j = 0; j < 10; j++) {
+//     b.push(Math.round(Math.random()))
+//   }
+//   a.push(b)
+// }
 
-var validate = function (matrix) {
-  for (var i = 0; i < matrix.length; i++) {
-    for (var j = 0; j < matrix.length; j++) {
-      if (matrix[i][j] === 1) {
-        findShip(matrix, i, j)
-      }
-    }
-  }
+exports.validate = function (matrix) {
+  // for (var i = 0; i < matrix.length; i++) {
+  //   for (var j = 0; j < matrix.length; j++) {
+  //     if (matrix[i][j] === 1) {
+  //       findShip(matrix, i, j)
+  //     }
+  //   }
+  // }
+  console.log(matrix)
 }
 
 var findShip = function (matrix, i, j) {
@@ -71,4 +72,4 @@ var checkAround = function (matrix, i, j, direction) {
   return valid
 }
 
-validate(a)
+// validate(a)

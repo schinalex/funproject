@@ -13,22 +13,29 @@
     <script src="./vendors/angular-aria.min.js"></script>
     <script src="./vendors/angular-material.min.js"></script>
     <script src="./vendors/angular-messages.min.js"></script>
-    <!-- <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script> -->
-    <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.js"></script> -->
+    <!-- mys js -->
     <script src="./js/main.js"></script>
   </head>
   <body ng-controller="mainCtrl">
-    <div class="container">
-      Hello World!
-      <form class="" action="index.html" method="post">
-        <div class="">
+    <div class="container" layout="column" layout-align="start center" flex-grow>
+        <div class="inputs">
           <md-input-container>
             <label>Name</label>
             <input ng-model="name">
           </md-input-container>
+          <md-input-container>
+            <label>Secret Key</label>
+            <input type="password" ng-model="password">
+          </md-input-container>
         </div>
-      </form>
-      <div class="battleship" ng-view></div>
+        <div layout="column">
+          <div layout="row" ng-repeat="row in matrix track by $index" ng-data="{{ placeholder = $index }}">
+            <div class="box md-whiteframe-1dp" ng-repeat="box in row track by $index" ng-class="{ selected: matrix[placeholder][$index]}" ng-click="toggle(placeholder,$index)"></div>
+          </div>
+          <md-input-container layout="row" layout-align="center">
+            <md-button class="md-primary md-raised" ng-click="submit()">Submit</md-button>
+          </md-input-container>
+        </div>
     </div>
   </body>
 </html>
