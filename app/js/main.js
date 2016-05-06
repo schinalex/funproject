@@ -3,30 +3,20 @@
 var MapUpload = angular.module('MapUpload', ['ngMaterial']);
 
 MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
-  $scope.makeMatrix = function () {
+  var makeMatrix = function makeMatrix(length) {
     var matrix = [];
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < length; i++) {
       var row = [];
-      for (var j = 0; i < 10; j++) {
+      for (var j = 0; j < length; j++) {
         row.push(0);
       }
       matrix.push(row);
     }
     return matrix;
   };
-  // console.log($scope.makeMatrix())
-  $scope.printMatrix = function (matrix) {
-    for (var i = 0; i < matrix.length; i++) {
-      var row = '';
-      for (var j = 0; i < matrix.length; j++) {
-        row += matrix[i][j];
-      }
-      $log.log(row);
-    }
-  };
   $scope.name = '';
   $scope.password = '';
-  $scope.matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+  $scope.matrix = makeMatrix(10);
   $scope.placeholder = null;
   $scope.toggle = function (i, j) {
     if ($scope.matrix[i][j]) {
@@ -35,12 +25,10 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
       $scope.matrix[i][j] = 1;
     }
   };
-  $scope.successCallback = function (res) {
-    $log.log('Success!!!');
-    $log.log(res);
+  var successCallback = function successCallback(res) {
+    $log.log(res.data);
   };
-  $scope.errorCallback = function (res) {
-    $log.log('Error!!!');
+  var errorCallback = function errorCallback(res) {
     $log.error(res);
   };
   $scope.submit = function () {
@@ -49,6 +37,6 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
       password: $scope.password,
       battleships: $scope.matrix
     };
-    $http.post('/form-action', data).then($scope.successCallback, $scope.errorCallback);
+    $http.post('/form-action', data).then(successCallback, errorCallback);
   };
 }]);

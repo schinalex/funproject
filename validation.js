@@ -1,5 +1,5 @@
 'use strict'
-
+var paddingZeros = require('./transform.js').paddingZeros
 // var a = []
 // for (var i = 0; i < 10; i++) {
 //   var b = []
@@ -9,15 +9,16 @@
 //   a.push(b)
 // }
 
-exports.validate = function (matrix) {
-  // for (var i = 0; i < matrix.length; i++) {
-  //   for (var j = 0; j < matrix.length; j++) {
-  //     if (matrix[i][j] === 1) {
-  //       findShip(matrix, i, j)
-  //     }
-  //   }
-  // }
-  console.log(matrix)
+exports.validate = function (initialMatrix) {
+  var matrix = paddingZeros(initialMatrix)
+  for (var i = 0; i < matrix.length; i++) {
+    for (var j = 0; j < matrix.length; j++) {
+      if (matrix[i][j] === 1) {
+        findShip(matrix, i, j)
+      }
+    }
+  }
+  // console.log(matrix)
 }
 
 var findShip = function (matrix, i, j) {

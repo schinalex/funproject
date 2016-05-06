@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
-var validation = require('./validation.js')
+var validate = require('./eugen.js').validate
+var paddingZeros = require('./transform.js').paddingZeros
 // var mysql = require('mysql')
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -12,15 +13,26 @@ app.get('/', function (req, res) {
 })
 
 app.post('/form-action', function (req, res) {
-  // res.send('got it ;)')
-  res.send({hello: 'wolrd'})
   console.log(req.body)
-  validation.validate(req.body.battleships)
+  if (!authentication(req.body.password)) {
+    res.send('no such secretKey')
+  } else {
+    res.send(validate(paddingZeros(req.body.battleships)))
+  }
 })
 
 app.listen(3000, '0.0.0.0', function () {
   console.log('Example app listening on port 3000!')
 })
+
+var authentication = function (password) {
+  var dataBasePassword = 'password'
+  if (password === dataBasePassword) {
+    return true
+  } else {
+    return false
+  }
+}
 
 // var connection = mysql.createConnection({
 //   host: 'localhost',
