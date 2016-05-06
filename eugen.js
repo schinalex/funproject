@@ -5,7 +5,7 @@ exports.validate = function (matrix) {
   var succes = 1;
   var failure = 0;
   var field = matrix
-  var a, b, c, d;
+  var a = 0, b = 0, c = 0, d = 0
   function checkErrors()
   {
   	for (var i = 1; i <= 10; i++)
@@ -123,10 +123,12 @@ exports.validate = function (matrix) {
   	var sum = 0;
   	for (var i = 1; i <= 10; i++)
   		for (var j = 1; j <= 10; j++)
-  			if (field[i][j] == 1)
-  				sum++;
-  	if (sum == 20)
-  		return succes;
+  			if (field[i][j] === 1) {
+          sum++
+        }
+  	     if (sum === 20){
+  		return succes
+    }
   	else return failure;
   }
 
@@ -134,16 +136,17 @@ exports.validate = function (matrix) {
   {
   	for (var i = 1; i <= 10; i++)
   		for (var j = 1; j <= 10; j++)
-  			if (field[i][j] == 0 || field[i][j] == 5)
+  			if (field[i][j] === 0 || field[i][j] === 5)
   			{ }
   			else return failure;
   	return succes;
   }
-  function checkDirection(x, y)
+
+  function checkDirection (x, y)
   {
-  	if (field[x][y + 1] == 1)
+  	if (field[x][y + 1] === 1)
   		return dreapta;
-  	if (field[x + 1][y] == 1)
+  	if (field[x + 1][y] === 1)
   		return jos;
   	else return unpatrat;
   }
@@ -161,12 +164,12 @@ exports.validate = function (matrix) {
   		while (field[x++][y] == 1)
   			length++;
   	}
-  	return length;
+  	return length
   }
 
   function markSucces(x, y, direction)
   {
-  	if(direction==dreapta)
+  	if(direction == dreapta)
   		while (field[x][y] == 1)
   		{
   			field[x][y] = 5;
@@ -182,16 +185,16 @@ exports.validate = function (matrix) {
 
   function markShape(length)
   {
-  	if (length == 4)
+  	if (length === 4)
   		a++;
   	else
-  	if (length == 3)
+  	if (length === 3)
   		b++;
   	else
-  	if (length == 2)
+  	if (length === 2)
   		c++;
   	else
-  	if (length == 1)
+  	if (length === 1)
   		d++;
   }
 
@@ -209,8 +212,9 @@ exports.validate = function (matrix) {
   		{
   			if (checkMarkedShips() == succes)
   			{
-  				if (checkShapeNumber() == succes);
-  				return succes;
+  				if (checkShapeNumber() == succes){
+            return succes
+          }
   			}
   		}
   	}
