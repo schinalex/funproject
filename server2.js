@@ -7,7 +7,7 @@ var mysql = require('mysql')
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '21032000Iulia',
+  password: 'password',
   database: 'Battleship_v2'
 })
 var bodyParser = require('body-parser')
@@ -43,52 +43,19 @@ var name = 'Jora'
 //   });
 // }
 
-function getLength (field, x, y) {
-  var lungime = 0
-  if (field[x][y + 1] === 1) {
-    while (field[x][y++]) {
-      lungime++
+function getLength (matrix, x, y) {
+  var length = 0
+  if (matrix[x][y + 1] === 1) {
+    while (matrix[x][y++]) {
+      length++
     }
-  } else if (field[x + 1][y]) {
-    while (field[x++][y]) {
-      lungime++
+  } else if (matrix[x + 1][y]) {
+    while (matrix[x++][y]) {
+      length++
     }
   }
-  return lungime
+  return length
 }
-// var authentication = function () {
-//   async.series(tasks, function () {})
-// }
-// async.series([
-//   function (done) {
-//     connection.query('SELECT idPlayer FROM Players where SecretKey=\'' + password + '\'', function (err, rows, fields) {
-//       if (err) {
-//         console.log(err)
-//       } else {
-//         result = rows[0].idPlayer
-//         console.log('idplayer este \'' + result + '\'')
-//         console.log(result)
-//         // console.log(rows)
-//       }
-//       done()
-//       console.log('wow, it works')
-//       return rows
-//     })
-//   }, function (done) {
-//     if (!result) {
-//       console.log('User not found') // error
-//     } else {
-//       connection.query('UPDATE Players SET Name =\'' + name + '\'Where idPlayer =\'' + result + '\'', function (err, rows, fields) {   // introduce numele in baza
-//         if (err) {
-//           console.log(err)
-//         }
-//       })
-//       done()
-//       return 0
-//     }
-//   }
-// ])
-
 var getDirection = function (matrix, x, y) {
   if (matrix[x][y + 1]) {
     return 'East'
@@ -96,7 +63,7 @@ var getDirection = function (matrix, x, y) {
     return 'South'
   }
 }
-var getShips = function (field) {    // introducere corabii de pe harta in baza
+var getShips = function (field) {
   var ships = []
   for (var i = 0; i < 10; i++) {
     for (var j = 0; j < 10; j++) {
@@ -121,37 +88,28 @@ var getShips = function (field) {    // introducere corabii de pe harta in baza
   return ships
 }
 
-var ships = [{cells: [[x, y], [x, y]]} ]
-//
-// var authentication = function (password) {
-//   var value = async.series([connection.query('SELECT SecretKey FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
-//     var getValue = function (done) {
-//       if (err) throw err
-//       done()
-//       return rows[0].idPlayer
-//     }
-//     getValue()
-//   })
-// ])
-//   var checkValue = function (value) {
-//     console.log(value)
-//     if (!value) {
-//       console.log('false!!!')
-//       return false
-//     } else {
-//       console.log('am intrat! biatch')
-//       var dataBasePassword = value[0].SecretKey
-//       console.log(dataBasePassword)
-//       if (password === dataBasePassword) {
-//         return true
-//       } else {
-//         return false
-//       }
-//     }
-//   }
-//   getValue()
-// }
-//
+
+var authentication = function (password) {
+  connection.query('SELECT SecretKey FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
+    if (err) throw err
+    var checkValue = function (value) {
+      console.log(value)
+      if (value.length === 0) {
+        console.log('false!!!')
+        return false
+      } else {
+        var dataBasePassword = value[0].SecretKey
+        console.log(dataBasePassword)
+        if (password === dataBasePassword) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+    return checkValue(rows)
+  }
+}
 
 
 // var updatePlayer = function (name, secretKey) {
@@ -201,71 +159,3 @@ var ships = [{cells: [[x, y], [x, y]]} ]
 // initiateKeys(100)
 // addPlayer('Eugen', 'askhdhalksjd')
 // listPlayers()
-//
-// connection.end()
-//
-// ===========================
-//
-// var field = []
-// var getLength = function (x, y) {
-//   var length = 0
-//   if (field[x][y + 1] === 1) {
-//     while (field[x][y++] === 1) {
-//       length++
-//     }
-//   } else if (field[x + 1][y] === 1) {
-//     while (field[x++][y] === 1) {
-//       length++
-//     }
-//   }
-//   return length
-// }
-//
-// var idMap = 1, idGameShip = 1, PlayerId = 1, shiptype = 1234
-// for (var i = 0; i <= 12 ; i++) {
-//   for (var j = 0; j <= 12; j++) {
-//     if (field[i][j] === 1) {
-//       if (field[i][j + 1] === 1) {  //dreapta
-//         {
-//           connection.query('INSERT INTO MapShips (PlayerId, ShipType) VALUES (PlayerId, length)', function (err, rows, fields) {
-//             if (err) throw err
-//               console.log(rows)
-//             })
-//           var t = j
-//           while (field[i][t] !== 0) {
-//             connection.query('INSERT INTO ShipCells (ShipId, X_Pos, Y_Pos) SELECT () ', function (err, rows, fields) {
-//               if (err) throw err
-//                 console.log(rows)
-//               })
-//             t++
-//           }
-//         }
-//       }
-//       else if(field[i+1][j] === 1) {  //jos
-//         connection.query('INSERT INTO MapShips (id, idGameShip, idPlayer, shipType) VALUES (idMap, idGameShip, idPlayer, shipType)', function (err, rows, fields) {
-//           if (err) throw err
-//             console.log(rows)
-//           })
-//         var t = i
-//         while (field[t][j] !== 0) {
-//           connection.query('INSERT INTO GameShipCells (idGameShip, X_POS, Y_POS) VALUES (idGameShip, t, j)', function (err, rows, fields) {
-//             if (err) throw err
-//               console.log(rows)
-//             })
-//           t++
-//         }
-//       } else {
-//         connection.query('INSERT INTO GameShips (idMap, idGameShip, idPlayer, shipType) VALUES (idMap, idGameShip, idPlayer, shipType)', function (err, rows, fields) {
-//           if (err) throw err
-//             console.log(rows)
-//         })
-//         connection.query('INSERT INTO GameShipCells (idGameShip, X_POS, Y_POS) VALUES (idGameShip, i, j)', function (err, rows, fields) {
-//           if (err) throw err
-//           console.log(rows)
-//         })
-//       }
-//     }
-//   }
-// }
-//
-//
