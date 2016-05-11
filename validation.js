@@ -6,7 +6,6 @@ exports.validate = function (field, ships) {
   } else {
     var shipType4 = 0, shipType3 = 0, shipType2 = 0, shipType1 = 0
     for (var ship of ships) {
-      console.log('ship.size = ' + ship.size)
       switch (ship.size) {
         case 4:
           shipType4++
@@ -24,8 +23,8 @@ exports.validate = function (field, ships) {
     }
     if (!(shipType4 === 1 && shipType3 === 2 && shipType2 === 3 && shipType1 === 4)) {
       validity = false
+      console.log('not the right number of ships of each type')
     }
-    console.log('ship of each type: ' + validity)
   }
   if (validity) {
     validity = checkAroundEachShip(field, ships)
@@ -43,44 +42,30 @@ var checkAroundEachShip = function (field, ships) {
     var y = ship.cells[0].y
     var length = ship.size
     var direction = ship.direction
-    console.log('x = ' + x)
-    console.log('y = ' + y)
-    console.log('length = ' + length)
     if (direction === 'East') {
       xLimit = x + 2
       yLimit = y + length + 1
-    } else if (direction === 'South') {
+    } else { // direction 'South' or null (single cell ship)
       xLimit = x + length + 1
       yLimit = y + 2
     }
     for (var i = x - 1; i < xLimit; i++) {
       for (var j = y - 1; j < yLimit; j++) {
         if (i >= 0 && j >= 0) {
-          console.log('j=' + j)
-          console.log('i=' + i)
-          console.log('yLimit=' + yLimit)
-          console.log('xLimit=' + xLimit)
-          console.log('field[' + i + '][' + j + ']')
           if (direction === 'East') {
-            if ((i = x) && !(j < y || j > y + length - 1)) {
+            if ((i === x) && !(j < y || j > y + length - 1)) {
               // do nothing because these are the ship cells
             } else {
               if (field[i][j]) {
-
                 noShipsAround = false
-              } else {
-                console.log('no cell around it: field[' + i + '][' + j + ']=' + field[i][j])
               }
-              // field[i][j] = 3
             }
-          } else if (direction === 'South') {
-            if ((j = y) && !(i < x || i > x + length - 1)) {
+          } else { // direction 'South' or null (single cell ship)
+            if ((j === y) && !(i < x || i > x + length - 1)) {
               // do nothing because these are the ship cells
             } else {
               if (field[i][j]) {
                 noShipsAround = false
-              } else {
-                console.log('no cell around it: field[' + i + '][' + j + ']=' + field[i][j])
               }
             }
           }
@@ -88,7 +73,5 @@ var checkAroundEachShip = function (field, ships) {
       }
     }
   }
-  console.log(field)
-  console.log(noShipsAround)
   return noShipsAround
 }

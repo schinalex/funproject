@@ -9,11 +9,9 @@ var getLength = function (matrix, x, y, direction) {
         x++
       }
     }
-    console.log('length=' + length)
     return length
   }
 }
-
 var getDirection = function (matrix, x, y) {
   if (matrix[x][y + 1]) {
     return 'East'
@@ -31,12 +29,9 @@ exports.getShips = function (field) {
         var ship = {}
         var direction = getDirection(field, i, j)
         ship.direction = direction
-        console.log(direction)
-        console.log(i, j)
         var length = getLength(field, i, j, direction)
         ship.size = length
         ship.cells = []
-        console.log(i, j)
         if (!direction) {
           ship.cells.push({x: i, y: j})
           field[i][j] = 2
