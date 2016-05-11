@@ -1,15 +1,16 @@
 var express = require('express')
-var async = require('async')
 var app = express()
-var validate = require('./eugen.js').validate
-var paddingZeros = require('./transform.js').paddingZeros
-var mysql = require('mysql')
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'Battleship_v2'
-})
+var validate = require('./validation.js').validate
+// var paddingZeros = require('./transform.js').paddingZeros
+var getShips = require('./getShips.js').getShips
+
+// var mysql = require('mysql')
+// var connection = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'password',
+//   database: 'Battleship_v2'
+// })
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,21 +18,27 @@ app.use(express.static('app'))
 
 app.post('/form-action', function (req, res) {
   console.log(req.body)
-  if (!authentication(req.body.password)) {
+  var id = getPlayerId(req.body.password)
+  if (!id) {
     res.send('no such secretKey')
   } else {
-    res.send(validate(paddingZeros(req.body.battleships)))
+    var ships = getShips(req.body.battleships)
+    var validity = validate(req.body.battleships, ships)
+    res.send(validity)
+    if (validity) {
+      insertShipsIntoDB(id, ships)
+    }
   }
 })
 
 app.listen(3000, '0.0.0.0', function () {
   console.log('Example app listening on port 3000!')
 })
-connection.connect()
+// connection.connect()
 
 // var result
-var password = '1234'
-var name = 'Jora'
+// var password = '1234'
+// var name = 'Jora'
 // var queryDB = function (query) {
 //   connection.query(query, function (err, rows, fields) {
 //     if (err) { console.log(err) }
@@ -42,75 +49,23 @@ var name = 'Jora'
 //     return rows
 //   });
 // }
-
-function getLength (matrix, x, y) {
-  var length = 0
-  if (matrix[x][y + 1] === 1) {
-    while (matrix[x][y++]) {
-      length++
-    }
-  } else if (matrix[x + 1][y]) {
-    while (matrix[x++][y]) {
-      length++
-    }
-  }
-  return length
+var insertShipsIntoDB = function () {
+  // inserts each ship into the DB
 }
-var getDirection = function (matrix, x, y) {
-  if (matrix[x][y + 1]) {
-    return 'East'
-  } else if (matrix[x + 1][y]) {
-    return 'South'
-  }
-}
-var getShips = function (field) {
-  var ships = []
-  for (var i = 0; i < 10; i++) {
-    for (var j = 0; j < 10; j++) {
-      if (field[i][j] === 1) {
-        var ship = {}
-        ship.cells = []
-        var direction = getDirection(field, i, j)
-        var length = getLength(field, i, j)
-        for (var index = 0; index < length; index++) {
-          if (direction === 'East') {
-            ship.cells.push([i, j + index])
-            field[i][j + index] = 2
-          } else if (direction === 'South') {
-            ship.cells.push([i + index, j])
-            field[i + index][j] = 2
-          }
-        }
-        ships.push(ship)
-      }
-    }
-  }
-  return ships
-}
-
-
-var authentication = function (password) {
-  connection.query('SELECT SecretKey FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
+var getPlayerId = function (password) {
+  var check = function (err, rows, fields) {
     if (err) throw err
-    var checkValue = function (value) {
-      console.log(value)
-      if (value.length === 0) {
-        console.log('false!!!')
-        return false
-      } else {
-        var dataBasePassword = value[0].SecretKey
-        console.log(dataBasePassword)
-        if (password === dataBasePassword) {
-          return true
-        } else {
-          return false
-        }
-      }
+    console.log(rows[0].SecretKey)
+    console.log(password)
+    if (!(rows[0].SecretKey === password)) {
+      console.log('nope')
+      return false
+    } else {
+      return rows[0].SecretKey
     }
-    return checkValue(rows)
   }
+  return check(null, [{SecretKey: '1234'}], null)
 }
-
 
 // var updatePlayer = function (name, secretKey) {
 //   var id = queryDB('SELECT IdPlayer FROM Players WHERE SecretKey = \'' + secretKey + '\'')
