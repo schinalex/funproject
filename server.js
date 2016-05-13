@@ -1,8 +1,7 @@
 var express = require('express')
 var app = express()
-var validate = require('./eugen.js').validate
-var paddingZeros = require('./transform.js').paddingZeros
 var getShips = require('./getShips.js').getShips
+var validate = require('./validation.js').validate
 var mysql = require('mysql')
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -21,19 +20,26 @@ app.post('/form-action', function (req, res) {
   if (!id) {
     res.send('no such secretKey')
   } else {
-    res.send(validate(paddingZeros(req.body.battleships)))
+    var ships = getShips(req.body.battleships)
+    var validation = validate(req.body.battleships, ships)
+    res.send(validation.message)
+    if (validation.result) {
+      insertShipsIntoDB(id, ships)
+    }
   }
-  var ships = getShips()
-  insertShipsIntoDB(id, ships)
 })
-
+app.get('/coordinates/x=:x/y=:y', function (req, res) {
+  var x = req.params.x
+  var y = req.params.y
+  res.send(shoot(x, y))
+})
 app.listen(3000, '0.0.0.0', function () {
-  console.log('Example app listening on port 3000!')
+  console.log('The server is listening on port 3000!')
 })
-// connection.connect()
+connection.connect()
 // var getId = function (password) {
 //   return new Promise(function (password) {
-//     connection.query('SELECT idPlayer FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
+//     connection.query('SELECT idPlayer FROM Players WHERE SecretKey = ' + connection.escape(password), function (err, rows, fields) {
 //       if (err) throw err
 //       resolve(rows[0].idPlayer)
 //     })
@@ -50,11 +56,25 @@ app.listen(3000, '0.0.0.0', function () {
 //   })
 // }
 var insertShipsIntoDB = function (idPlayer, ships) {
-  // inserts each ship into the DB
+  for (var ship of ships) {
+    connection.query('INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ')', function (err, rows, fields) {
+      if (err) throw err
+      connection.query('SELECT id FROM mapships ORDER BY id DESC LIMIT 1', function (err, rows, fields) {
+        if (err) throw err
+        var idShip = rows[0].id
+        for (var cell of ship.cells) {
+          connection.query('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ',' + cell.x + ', ' + cell.y + ')')
+        }
+      })
+    })
+  }
+}
+var shoot = function (x, y) {
+  // shoot at the coordinates given
 }
 
 var getPlayerId = function (password) {
-  connection.query('SELECT idPlayer FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
+  return connection.query('SELECT idPlayer FROM Players WHERE SecretKey = ?', password, function (err, rows, fields) {
     if (err) throw err
     if (rows.length === 0) {
       return false

@@ -1,16 +1,7 @@
 var express = require('express')
 var app = express()
 var validate = require('./validation.js').validate
-// var paddingZeros = require('./transform.js').paddingZeros
 var getShips = require('./getShips.js').getShips
-
-// var mysql = require('mysql')
-// var connection = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'password',
-//   database: 'Battleship_v2'
-// })
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,14 +14,14 @@ app.post('/form-action', function (req, res) {
     res.send('no such secretKey')
   } else {
     var ships = getShips(req.body.battleships)
-    var validity = validate(req.body.battleships, ships)
-    res.send(validity)
-    if (validity) {
+    var validation = validate(req.body.battleships, ships)
+    res.send(validation.message)
+    if (validation.result) {
       insertShipsIntoDB(id, ships)
     }
   }
 })
-
+app.get('/x=')
 app.listen(3000, '0.0.0.0', function () {
   console.log('Example app listening on port 3000!')
 })

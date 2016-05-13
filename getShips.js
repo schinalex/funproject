@@ -2,7 +2,7 @@ var getLength = function (matrix, x, y, direction) {
   if (!direction) {
     return 1
   } else {
-    for (var length = 0; matrix[x][y] === 1; length++) {
+    for (var length = 0; x < 10 && matrix[x][y] === 1; length++) {
       if (direction === 'East') {
         y++
       } else if (direction === 'South') {
@@ -12,15 +12,17 @@ var getLength = function (matrix, x, y, direction) {
     return length
   }
 }
+
 var getDirection = function (matrix, x, y) {
-  if (matrix[x][y + 1]) {
+  if (y < 9 && matrix[x][y + 1]) {
     return 'East'
-  } else if (matrix[x + 1][y]) {
+  } else if (x < 9 && matrix[x + 1][y]) {
     return 'South'
   } else {
     return null
   }
 }
+
 exports.getShips = function (field) {
   var ships = []
   for (var i = 0; i < 10; i++) {

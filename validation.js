@@ -1,10 +1,16 @@
 exports.validate = function (field, ships) {
-  var validity = true
+  var validation = {
+    result: true,
+    message: ''
+  }
   if (ships.length !== 10) {
-    validity = false
-    console.log('not 10 ships')
+    validation.result = false
+    validation.message = 'not 10 ships'
   } else {
-    var shipType4 = 0, shipType3 = 0, shipType2 = 0, shipType1 = 0
+    var shipType4 = 0
+    var shipType3 = 0
+    var shipType2 = 0
+    var shipType1 = 0
     for (var ship of ships) {
       switch (ship.size) {
         case 4:
@@ -22,16 +28,16 @@ exports.validate = function (field, ships) {
       }
     }
     if (!(shipType4 === 1 && shipType3 === 2 && shipType2 === 3 && shipType1 === 4)) {
-      validity = false
-      console.log('not the right number of ships of each type')
+      validation.result = false
+      validation.message = 'not the right number of ships of each type'
     }
   }
-  if (validity) {
-    validity = checkAroundEachShip(field, ships)
-    console.log('checkAroundEachShip: ' + validity)
+  if (validation.result) {
+    validation.result = checkAroundEachShip(field, ships)
+    validation.message = validation.result ? 'success' : 'there are other cells around the ship'
   }
-  console.log('valid = ' + validity)
-  return validity
+  console.log('valid = ' + validation.result)
+  return validation
 }
 
 var checkAroundEachShip = function (field, ships) {
@@ -51,7 +57,7 @@ var checkAroundEachShip = function (field, ships) {
     }
     for (var i = x - 1; i < xLimit; i++) {
       for (var j = y - 1; j < yLimit; j++) {
-        if (i >= 0 && j >= 0) {
+        if (i >= 0 && j >= 0 && i < 10 && j < 10) {
           if (direction === 'East') {
             if ((i === x) && !(j < y || j > y + length - 1)) {
               // do nothing because these are the ship cells
