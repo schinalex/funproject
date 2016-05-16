@@ -1,31 +1,87 @@
 var express = require('express')
+var async = require('async')
 var app = express()
-var validate = require('./validation.js').validate
 var getShips = require('./getShips.js').getShips
+var validate = require('./validation.js').validate
+var mysql = require('mysql')
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '21032000Iulia',
+  database: 'Battleship_v2'
+})
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('app'))
 
 app.post('/form-action', function (req, res) {
-  console.log(req.body)
-  var id = getPlayerId(req.body.password)
-  if (!id) {
-    res.send('no such secretKey')
-  } else {
-    var ships = getShips(req.body.battleships)
-    var validation = validate(req.body.battleships, ships)
-    res.send(validation.message)
-    if (validation.result) {
-      insertShipsIntoDB(id, ships)
+  //console.log(req.body)
+  //console.log(req.body.password)
+  var getId = getPlayerId(req.body.password)
+  console.log(getId)
+  getId.then(function (id) {
+    if (!id) {
+      res.send('no such secretKey')
+    } else {
+      var ships = getShips(req.body.battleships)
+      var validation = validate(req.body.battleships, ships)
+      res.send(validation.message)
+      if (validation.result) {
+        insertShipsIntoDB(id, ships)
+      }
     }
-  }
+  })
 })
-app.get('/x=')
+app.get('/coordinates/x=:x/y=:y', function (req, res) {
+  var x = req.params.x
+  var y = req.params.y
+  res.send(shoot(x, y))
+})
 app.listen(3000, '0.0.0.0', function () {
-  console.log('Example app listening on port 3000!')
+  console.log('The server is listening on port 3000!')
 })
-// connection.connect()
+connection.connect()
+
+var getPlayerId = function (password) {
+  var a = connection.query('SELECT idPlayer FROM Players WHERE SecretKey = \'' + password + '\'', function (err, rows, fields) {
+    if (err) throw err
+    if (rows.length === 0) {
+      return false
+    } else {
+      return rows[0].idPlayer
+    }
+  })
+  return a
+}
+
+var insertShipsIntoDB = function (idPlayer, ships) {
+  for (var ship of ships) {
+    callship(idPlayer, ships)
+  }
+}
+
+var callship = function (idPlayer, ships) {
+console.log('INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ')')
+connection.query('INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ')', function (err, rows, fields) {
+  if (err) throw err
+  connection.query('SELECT id FROM mapships ORDER BY id DESC LIMIT 1', function (err, rows, fields) {
+    if (err) throw err
+    var idShip = rows[0].id
+    console.log(idShip)
+    for (var cell of ship.cells) {
+      console.log('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ',' + cell.x + ', ' + cell.y + ')')
+      connection.query('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ',' + cell.x + ', ' + cell.y + ')')
+    }
+  })
+})
+}
+        // for (var cell of ship.cells) {
+        //   console.log('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ',' + cell.x + ', ' + cell.y + ')')
+        //   connection.query('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ',' + cell.x + ', ' + cell.y + ')')
+        // }
+
+
 
 // var result
 // var password = '1234'
@@ -40,23 +96,23 @@ app.listen(3000, '0.0.0.0', function () {
 //     return rows
 //   });
 // }
-var insertShipsIntoDB = function () {
+//var insertShipsIntoDB = function () {
   // inserts each ship into the DB
-}
-var getPlayerId = function (password) {
-  var check = function (err, rows, fields) {
-    if (err) throw err
-    console.log(rows[0].SecretKey)
-    console.log(password)
-    if (!(rows[0].SecretKey === password)) {
-      console.log('nope')
-      return false
-    } else {
-      return rows[0].SecretKey
-    }
-  }
-  return check(null, [{SecretKey: '1234'}], null)
-}
+// }
+// var getPlayerId = function (password) {
+//   var check = function (err, rows, fields) {
+//     if (err) throw err
+//     console.log(rows[0].SecretKey)
+//     console.log(password)
+//     if (!(rows[0].SecretKey === password)) {
+//       console.log('nope')
+//       return false
+//     } else {
+//       return rows[0].SecretKey
+//     }
+//   }
+//   return check(null, [{SecretKey: '1234'}], null)
+// }
 
 // var updatePlayer = function (name, secretKey) {
 //   var id = queryDB('SELECT IdPlayer FROM Players WHERE SecretKey = \'' + secretKey + '\'')
