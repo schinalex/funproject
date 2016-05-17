@@ -17,14 +17,32 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
   $scope.matrix = makeMatrix(10)
   $scope.placeholder = null
   $scope.toggle = (i, j) => $scope.matrix[i][j] ? $scope.matrix[i][j] = 0 : $scope.matrix[i][j] = 1
-  const successCallback = (res) => $log.log(res.data)
-  const errorCallback = (res) => $log.error(res)
+  const success = (res) => $log.log(res.data)
+  const error = (res) => $log.error(res)
   $scope.submit = () => {
     var data = {
       name: $scope.name,
       password: $scope.password,
       battleships: $scope.matrix
     }
-    $http.post('/form-action', data).then(successCallback, errorCallback)
+    $http.post('/register', data).then(success, error)
+  }
+}])
+
+MapUpload.controller('testCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
+  $scope.secretKey = ''
+  $scope.gameId = ''
+  $scope.x = ''
+  $scope.y = ''
+  const success = (res) => $log.log(res.data)
+  const error = (res) => $log.error(res)
+  $scope.shoot = () => {
+    var data = {
+      secretKey: $scope.secretKey,
+      gameId: $scope.gameId,
+      x: $scope.x,
+      y: $scope.y
+    }
+    $http.post('/shoot', data).then(success, error)
   }
 }])
