@@ -1,4 +1,4 @@
-var getLength = function (matrix, x, y, direction) {
+const getLength = (matrix, x, y, direction) => {
   if (!direction) {
     return 1
   } else {
@@ -13,7 +13,7 @@ var getLength = function (matrix, x, y, direction) {
   }
 }
 
-var getDirection = function (matrix, x, y) {
+const getDirection = (matrix, x, y) => {
   if (y < 9 && matrix[x][y + 1]) {
     return 'East'
   } else if (x < 9 && matrix[x + 1][y]) {
@@ -23,10 +23,10 @@ var getDirection = function (matrix, x, y) {
   }
 }
 
-exports.getShips = function (field) {
+exports.getShips = (field) => {
   var ships = []
-  for (var i = 0; i < 10; i++) {
-    for (var j = 0; j < 10; j++) {
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
       if (field[i][j] === 1) {
         var ship = {}
         var direction = getDirection(field, i, j)
@@ -38,7 +38,7 @@ exports.getShips = function (field) {
           ship.cells.push({x: i, y: j})
           field[i][j] = 2
         } else {
-          for (var index = 0; index < length; index++) {
+          for (let index = 0; index < length; index++) {
             if (direction === 'East') {
               ship.cells.push({x: i, y: j + index})
               field[i][j + index] = 2

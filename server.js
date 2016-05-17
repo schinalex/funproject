@@ -1,25 +1,27 @@
-var express = require('express')
-var app = express()
-var getShips = require('./getShips.js').getShips
-var validate = require('./validation.js').validate
-var mysql = require('mysql')
-var connection = mysql.createConnection({
+'use strict'
+
+const express = require('express')
+const app = express()
+const getShips = require('./getShips.js').getShips
+const validate = require('./validation.js').validate
+const mysql = require('mysql')
+const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '21032000Iulia',
   database: 'Battleship_v2',
   multipleStatements: true
 })
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('app'))
 
-app.post('/form-action', function (req, res) {
+app.post('/form-action', (req, res) => {
   console.log(req.body)
   console.log(req.body.password)
   var getPlayer = getPlayerData(req.body.password)
-  getPlayer.then(function (player) {
+  getPlayer.then((player) => {
     var id = player.idPlayer
     var registered = player.isRegistered
 
@@ -40,42 +42,46 @@ app.post('/form-action', function (req, res) {
     }
   })
 })
-app.get('/coordinates/x=:x/y=:y', function (req, res) {
+app.get('/coordinates/x=:x/y=:y', (req, res) => {
   var x = req.params.x
   var y = req.params.y
   res.send(shoot(x, y))
 })
-app.listen(3000, '0.0.0.0', function () {
+app.listen(3000, '0.0.0.0', () => {
   console.log('The server is listening on port 3000!')
 })
 connection.connect()
 
-var insertShipsIntoDB = (idPlayer, ships) => {
+const insertShipsIntoDB = (idPlayer, ships) => {
   for (let ship of ships) {
-    connection.query('INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + '); SELECT id FROM mapships ORDER BY id DESC LIMIT 1', function (err, rows, fields) {
-      if (err) throw err
-      console.log('===>INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ')')
-      var idShip = rows[1][0].id
-      console.log(idShip)
-      for (var cell of ship.cells) {
-        console.log('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ', ' + cell.x + ', ' + cell.y + ')')
-        connection.query('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ', ' + cell.x + ', ' + cell.y + ')')
+    connection.query(
+      'INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ');' +
+      'SELECT id FROM mapships ORDER BY id DESC LIMIT 1',
+      (err, rows, fields) => {
+        if (err) throw err
+        console.log('===>INSERT INTO mapships (PlayerId, ShipType) VALUES  (' + idPlayer + ', ' + ship.size + ')')
+        var idShip = rows[1][0].id
+        console.log(idShip)
+        for (let cell of ship.cells) {
+          console.log('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ', ' + cell.x + ', ' + cell.y + ')')
+          connection.query('INSERT INTO shipcells (ShipId, X_Pos, Y_Pos) VALUES (' + idShip + ', ' + cell.x + ', ' + cell.y + ')')
+        }
       }
-    })
+    )
   }
 }
-var shoot = function (x, y) {
+const shoot = (playerId, x, y) => {
   // shoot at the coordinates given
 }
-var updatePlayer = (id, name) => {
+const updatePlayer = (id, name) => {
   connection.query('UPDATE Players SET Name = ' + connection.escape(name) + ', isRegistered = 1 WHERE idPlayer = ' + id)
 }
 
-var getPlayerData = function (password) {
-  return new Promise(function (resolve, reject) {
+const getPlayerData = (password) => {
+  return new Promise((resolve, reject) => {
     console.log('in functie' + password)
     console.log('SELECT * FROM Players WHERE SecretKey = ' + connection.escape(password))
-    connection.query('SELECT * FROM Players WHERE SecretKey = ' + connection.escape(password), function (err, rows, fields) {
+    connection.query('SELECT * FROM Players WHERE SecretKey = ' + connection.escape(password), (err, rows, fields) => {
       if (err) throw err
       if (rows.length === 0) {
         resolve(null)

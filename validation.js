@@ -1,4 +1,4 @@
-exports.validate = function (field, ships) {
+exports.validate = (field, ships) => {
   var validation = {
     result: true,
     message: ''
@@ -40,10 +40,10 @@ exports.validate = function (field, ships) {
   return validation
 }
 
-var checkAroundEachShip = function (field, ships) {
+const checkAroundEachShip = (field, ships) => {
   var noShipsAround = true
   var xLimit, yLimit
-  for (var ship of ships) {
+  for (let ship of ships) {
     var x = ship.cells[0].x
     var y = ship.cells[0].y
     var length = ship.size
@@ -55,8 +55,8 @@ var checkAroundEachShip = function (field, ships) {
       xLimit = x + length + 1
       yLimit = y + 2
     }
-    for (var i = x - 1; i < xLimit; i++) {
-      for (var j = y - 1; j < yLimit; j++) {
+    for (let i = x - 1; i < xLimit; i++) {
+      for (let j = y - 1; j < yLimit; j++) {
         if (i >= 0 && j >= 0 && i < 10 && j < 10) {
           if (direction === 'East') {
             if ((i === x) && !(j < y || j > y + length - 1)) {

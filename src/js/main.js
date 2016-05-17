@@ -1,11 +1,11 @@
-var MapUpload = angular.module('MapUpload', ['ngMaterial'])
+const MapUpload = angular.module('MapUpload', ['ngMaterial'])
 
 MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
   var makeMatrix = (length) => {
     var matrix = []
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       var row = []
-      for (var j = 0; j < length; j++) {
+      for (let j = 0; j < length; j++) {
         row.push(0)
       }
       matrix.push(row)
@@ -16,19 +16,9 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
   $scope.password = ''
   $scope.matrix = makeMatrix(10)
   $scope.placeholder = null
-  $scope.toggle = (i, j) => {
-    if ($scope.matrix[i][j]) {
-      $scope.matrix[i][j] = 0
-    } else {
-      $scope.matrix[i][j] = 1
-    }
-  }
-  var successCallback = (res) => {
-    $log.log(res.data)
-  }
-  var errorCallback = (res) => {
-    $log.error(res)
-  }
+  $scope.toggle = (i, j) => $scope.matrix[i][j] ? $scope.matrix[i][j] = 0 : $scope.matrix[i][j] = 1
+  const successCallback = (res) => $log.log(res.data)
+  const errorCallback = (res) => $log.error(res)
   $scope.submit = () => {
     var data = {
       name: $scope.name,
