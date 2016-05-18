@@ -27,15 +27,10 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
     }
     $http.post('/register', data).then(success, error)
   }
-}])
-
-MapUpload.controller('testCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
   $scope.secretKey = ''
   $scope.gameId = ''
   $scope.x = ''
   $scope.y = ''
-  const success = (res) => $log.log(res.data)
-  const error = (res) => $log.error(res)
   $scope.shoot = () => {
     var data = {
       secretKey: $scope.secretKey,

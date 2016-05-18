@@ -1,7 +1,7 @@
 'use strict'
 var gulp = require('gulp')
-var sass = require('gulp-sass')
-var autoprefixer = require('gulp-autoprefixer')
+// var sass = require('gulp-sass')
+// var autoprefixer = require('gulp-autoprefixer')
 var cleanCSS = require('gulp-clean-css')
 var rename = require('gulp-rename')
 var folder = require('gulp-folder')
@@ -28,16 +28,16 @@ gulp.task('babel', function () {
     .pipe(gulp.dest('./app/js/'))
 })
 
-gulp.task('sass', function () {
-  gulp.src('./src/style/style.sass')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-      cascade: false
-    }))
-    .pipe(gulp.dest('./app/css'))
-    .pipe(browserSync.stream())
-})
+// gulp.task('sass', function () {
+//   gulp.src('./src/style/style.sass')
+//     .pipe(sass().on('error', sass.logError))
+//     .pipe(autoprefixer({
+//       browsers: ['last 2 versions'],
+//       cascade: false
+//     }))
+//     .pipe(gulp.dest('./app/css'))
+//     .pipe(browserSync.stream())
+// })
 
 gulp.task('html', function () {
   gulp.src('./src/*.html')
@@ -85,4 +85,4 @@ gulp.task('watch', function () {
   gulp.watch('./src/img/*', ['img'])
 })
 
-gulp.task('default', ['fw', 'serve', 'sass', 'babel', 'html', 'img', 'vendors', 'watch'])
+gulp.task('default', ['fw', 'serve'/*, 'sass'*/, 'babel', 'html', 'img', 'vendors', 'watch'])

@@ -44,10 +44,10 @@ app.post('/form-action', (req, res) => {
   }
 })
 
-app.post('/getGame', (req, res) => {
-  console.log(req.body.secretKey)
-  console.log(req.body)
-  getGame(req.body.secretKey)
+app.get('/getGame/:secretKey', (req, res) => {
+  console.log(req.params)
+  console.log(req.params.secretKey)
+  getGame(req.params.secretKey)
     .then(res.send)
 })
 
@@ -57,7 +57,7 @@ app.post('/shoot', (req, res) => {
   var secretKey = req.body.secretKey
   var gameId = req.body.gameId
   shoot(secretKey, gameId, x, y)
-    .then(res.send)
+    .then(console.log.bind(console))
 })
 
 app.listen(3000, '0.0.0.0', () => {
@@ -119,12 +119,12 @@ const getGame = (secretKey) => {
     console.log('select * From vwAvaiablePlayerGames WHERE secretKey = ' + connection.escape(secretKey) + '  LIMIT 0, 1;')
     connection.query('select * From vwAvaiablePlayerGames WHERE secretKey = ' + connection.escape(secretKey) + '  LIMIT 0, 1;', (err, rows, fields) => {
       if (err) throw err
-      console.log(rows)
+      // console.log(rows)
       if (rows.length === 0) {
         resolve(null)
       } else {
-        console.log(rows[0].IdPlayer_Opponent)
-        resolve(rows[0].IdPlayer_Opponent)
+        // console.log(rows[0].IdPlayer_Opponent)
+        resolve(String(rows[0].IdPlayer_Opponent))
       }
     })
   })

@@ -19,17 +19,13 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
   $scope.matrix = makeMatrix(10);
   $scope.placeholder = null;
   $scope.toggle = function (i, j) {
-    if ($scope.matrix[i][j]) {
-      $scope.matrix[i][j] = 0;
-    } else {
-      $scope.matrix[i][j] = 1;
-    }
+    return $scope.matrix[i][j] ? $scope.matrix[i][j] = 0 : $scope.matrix[i][j] = 1;
   };
-  var successCallback = function successCallback(res) {
-    $log.log(res.data);
+  var success = function success(res) {
+    return $log.log(res.data);
   };
-  var errorCallback = function errorCallback(res) {
-    $log.error(res);
+  var error = function error(res) {
+    return $log.error(res);
   };
   $scope.submit = function () {
     var data = {
@@ -37,6 +33,28 @@ MapUpload.controller('mainCtrl', ['$scope', '$log', '$http', function ($scope, $
       password: $scope.password,
       battleships: $scope.matrix
     };
-    $http.post('/form-action', data).then(successCallback, errorCallback);
+    $http.post('/register', data).then(success, error);
+  };
+}]);
+
+MapUpload.controller('testCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
+  $scope.secretKey = '';
+  $scope.gameId = '';
+  $scope.x = '';
+  $scope.y = '';
+  var success = function success(res) {
+    return $log.log(res.data);
+  };
+  var error = function error(res) {
+    return $log.error(res);
+  };
+  $scope.shoot = function () {
+    var data = {
+      secretKey: $scope.secretKey,
+      gameId: $scope.gameId,
+      x: $scope.x,
+      y: $scope.y
+    };
+    $http.post('/shoot', data).then(success, error);
   };
 }]);

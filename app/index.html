@@ -36,6 +36,27 @@
             <md-button class="md-primary md-raised" ng-click="submit()">Submit</md-button>
           </md-input-container>
         </div>
+        <div class="test">
+          <md-input-container>
+            <label>Secret Key</label>
+            <input ng-model="secretKey">
+          </md-input-container>
+          <md-input-container>
+            <label>Game ID</label>
+            <input ng-model="gameId">
+          </md-input-container>
+          <md-input-container>
+            <label>Position X</label>
+            <input ng-model="x">
+          </md-input-container>
+          <md-input-container>
+            <label>Position Y</label>
+            <input ng-model="y">
+          </md-input-container><br>
+          <md-input-container layout="row" layout-align="center">
+            <md-button class="md-primary md-raised" ng-click="shoot()">Shoot</md-button>
+          </md-input-container>
+        </div>
     </div>
   </body>
 </html>
