@@ -1,3 +1,5 @@
+'use strict'
+
 exports.validate = (field, ships) => {
   var validation = {
     result: true,

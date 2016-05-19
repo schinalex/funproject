@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('app'))
 
 app.post('/register', (req, res) => {
-  if (!req.body.password || !req.body.name) {
+  if (!(req.body.password && req.body.name)) {
     res.send('please write the Name and the SecretKey')
   } else {
     console.log(req.body)
@@ -45,10 +45,14 @@ app.post('/register', (req, res) => {
 })
 
 app.get('/getGame/:secretKey', (req, res) => {
-  console.log(req.params)
-  console.log(req.params.secretKey)
-  getGame(req.params.secretKey)
-    .then(res.send)
+  var secretKey = req.params.secretKey
+  console.log(secretKey)
+  if (!secretKey) {
+    res.send('please include the Secret Key')
+  } else {
+    getGame(secretKey)
+      .then((gameId) => res.send(gameId))
+  }
 })
 
 app.post('/shoot', (req, res) => {
@@ -56,8 +60,12 @@ app.post('/shoot', (req, res) => {
   var y = req.body.y
   var secretKey = req.body.secretKey
   var gameId = req.body.gameId
-  shoot(secretKey, gameId, x, y)
-    .then(console.log.bind(console))
+  if (!(secretKey && gameId && x && y)) {
+    res.send('please include all the data required')
+  } else {
+    shoot(secretKey, gameId, x, y)
+      .then((message) => res.send(message))
+  }
 })
 
 app.listen(3000, '0.0.0.0', () => {
@@ -124,7 +132,7 @@ const getGame = (secretKey) => {
         resolve(null)
       } else {
         // console.log(rows[0].IdPlayer_Opponent)
-        resolve(String(rows[0].IdPlayer_Opponent))
+        resolve(rows[0].IdPlayer_Opponent)
       }
     })
   })

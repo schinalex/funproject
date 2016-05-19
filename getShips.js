@@ -1,3 +1,5 @@
+'use strict'
+
 const getLength = (matrix, x, y, direction) => {
   if (!direction) {
     return 1

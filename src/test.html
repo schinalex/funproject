@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="MapUpload">
+  <head>
+    <meta charset="utf-8">
+    <title>map layout</title>
+    <!-- Angular-Meterial styles -->
+    <link rel="stylesheet" href="./vendors/angular-material.min.css">
+    <!-- my styles -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Angular -->
+    <script src="./vendors/angular.min.js"></script>
+    <script src="./vendors/angular-animate.min.js"></script>
+    <script src="./vendors/angular-aria.min.js"></script>
+    <script src="./vendors/angular-material.min.js"></script>
+    <script src="./vendors/angular-messages.min.js"></script>
+    <!-- mys js -->
+    <script src="./js/main.js"></script>
+  </head>
+  <body ng-controller="testCtrl">
+        <md-input-container layout="row" layout-align="center">
+          <md-button class="md-primary md-raised" ng-click="getGame()">Get Game</md-button>
+        </md-input-container>
+        <div class="test">
+          <md-input-container>
+            <label>Secret Key</label>
+            <input ng-model="secretKey">
+          </md-input-container>
+          <md-input-container>
+            <label>Game ID</label>
+            <input ng-model="gameId">
+          </md-input-container>
+          <md-input-container>
+            <label>Position X</label>
+            <input ng-model="x">
+          </md-input-container>
+          <md-input-container>
+            <label>Position Y</label>
+            <input ng-model="y">
+          </md-input-container><br>
+          <md-input-container layout="row" layout-align="center">
+            <md-button class="md-primary md-raised" ng-click="shoot()">Shoot</md-button>
+          </md-input-container>
+        </div>
+    </div>
+  </body>
+</html>
