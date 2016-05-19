@@ -13,7 +13,7 @@
 <br>
 <p><strong>shoot</strong></p>
 <p>
-  a POST method <br>
+  a POST method url = "/shoot"<br>
   Content-Type: application/json <br>
   it expects an object of the folowing form: { secretKey: 'someKey', gameId: theGameId, x: positionX, y: positionY}<br>
   and it returns the message from the DB
