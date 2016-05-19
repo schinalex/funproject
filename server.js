@@ -51,7 +51,7 @@ app.get('/getGame/:secretKey', (req, res) => {
     res.send('please include the Secret Key')
   } else {
     getGame(secretKey)
-      .then((gameId) => res.send(gameId))
+      .then((gameId) => res.json({gameId: gameId}))
   }
 })
 
@@ -97,8 +97,13 @@ const shoot = (secretKey, gameId, x, y) => {
     connection.query(
       'CALL spGameHit (?, ?,?,?, @isError, @Message);' +
       'SELECT @isError as isErrror, @Message as isMessage;', [secretKey, gameId, x, y], (err, rows, fields) => {
-        if (err) throw err
-        resolve(rows[0].Message)
+          if (err) resolve(null)
+          else
+            try {
+              resolve(rows[1][0])
+            } catch (e) {
+              resolve(null)
+            }
       }
     )
   })
