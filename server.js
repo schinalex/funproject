@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('app'))
 
-app.post('/form-action', (req, res) => {
+app.post('/register', (req, res) => {
   if (!req.body.password || !req.body.name) {
     res.send('please write the Name and the SecretKey')
   } else {
