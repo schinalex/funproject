@@ -97,13 +97,15 @@ const shoot = (secretKey, gameId, x, y) => {
     connection.query(
       'CALL spGameHit (?, ?,?,?, @isError, @Message);' +
       'SELECT @isError as isErrror, @Message as isMessage;', [secretKey, gameId, x, y], (err, rows, fields) => {
-          if (err) resolve(null)
-          else
-            try {
-              resolve(rows[1][0])
-            } catch (e) {
-              resolve(null)
-            }
+        if (err) {
+          resolve(null)
+        } else {
+          try {
+            resolve(rows[1][0])
+          } catch (e) {
+            resolve(null)
+          }
+        }
       }
     )
   })
@@ -127,6 +129,20 @@ const getPlayerData = (password) => {
   })
 }
 
+const getAdminData = (login, password) => {
+  return new Promise((resolve, reject) => {
+    var query = 'SELECT * FROM admins WHERE login = ' + connection.escape(login) + ' and password = ' + connection.escape(password) + ' limit 0, 1'
+    connection.query(query, (err, rows, fields) => {
+      if (err) throw err
+      console.log(rows)
+      if (rows.length === 0) {
+        resolve(null)
+      } else {
+        resolve(rows[0])
+      }
+    })
+  })
+}
 const getGame = (secretKey) => {
   return new Promise((resolve, reject) => {
     console.log('select * From vwAvaiablePlayerGames WHERE secretKey = ' + connection.escape(secretKey) + '  LIMIT 0, 1;')

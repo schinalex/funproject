@@ -77,7 +77,7 @@ gulp.task('fw', function () {
 })
 
 gulp.task('watch', function () {
-  gulp.watch('./src/style/**/*.sass', ['sass'])
+  // gulp.watch('./src/style/**/*.sass', ['sass'])
   gulp.watch('./src/js/*.js', ['babel'])
   gulp.watch('./src/*.html', ['html'])
   gulp.watch('./app/*.html').on('change', reload)

@@ -14,33 +14,66 @@
     <script src="./vendors/angular-material.min.js"></script>
     <script src="./vendors/angular-messages.min.js"></script>
     <!-- mys js -->
-    <script src="./js/main.js"></script>
+    <script src="./js/test.js"></script>
   </head>
-  <body ng-controller="testCtrl">
-        <md-input-container layout="row" layout-align="center">
-          <md-button class="md-primary md-raised" ng-click="getGame()">Get Game</md-button>
+  <body>
+    <div class="register" layout="column" layout-align="start center" flex-grow ng-controller="registerCtrl">
+      <div class="inputs">
+        <md-input-container>
+          <label>Name</label>
+          <input ng-model="name">
         </md-input-container>
-        <div class="test">
-          <md-input-container>
-            <label>Secret Key</label>
-            <input ng-model="secretKey">
-          </md-input-container>
-          <md-input-container>
-            <label>Game ID</label>
-            <input ng-model="gameId">
-          </md-input-container>
-          <md-input-container>
-            <label>Position X</label>
-            <input ng-model="x">
-          </md-input-container>
-          <md-input-container>
-            <label>Position Y</label>
-            <input ng-model="y">
-          </md-input-container><br>
-          <md-input-container layout="row" layout-align="center">
-            <md-button class="md-primary md-raised" ng-click="shoot()">Shoot</md-button>
-          </md-input-container>
+        <md-input-container>
+          <label>Secret Key</label>
+          <input type="password" ng-model="password">
+        </md-input-container>
+      </div>
+      <div layout="column">
+        <div layout="row" ng-repeat="row in matrix track by $index" ng-data="{{ placeholder = $index }}">
+          <div class="box md-whiteframe-1dp" ng-repeat="box in row track by $index" ng-class="{ selected: matrix[placeholder][$index]}" ng-click="toggle(placeholder,$index)"></div>
         </div>
+      </div>
+      <md-input-container layout="row" layout-align="center">
+        <md-button class="md-primary md-raised" ng-click="submit()">Submit</md-button>
+      </md-input-container>
     </div>
+    <hr>
+    <div class="shoot" layout="column" layout-align="start center" ng-controller="shootCtrl">
+      <div class="inputs" layout="row" layout-align="center">
+        <md-input-container>
+          <label>Secret Key</label>
+          <input ng-model="password">
+        </md-input-container>
+        <md-input-container>
+          <label>Game ID</label>
+          <input ng-model="gameId">
+        </md-input-container>
+        <md-input-container>
+          <label>Position X</label>
+          <input ng-model="x">
+        </md-input-container>
+        <md-input-container>
+          <label>Position Y</label>
+          <input ng-model="y">
+        </md-input-container>
+      </div>
+      <md-input-container layout="row" layout-align="center">
+        <md-button class="md-primary md-raised" ng-click="shoot()">Shoot</md-button>
+      </md-input-container>
+    </div>
+    <hr>
+    <div class="getGame" layout="column" layout-align="center center" ng-controller="getGameCtrl">
+      <md-input-container>
+        <label>Secret Key</label>
+        <input type="password" ng-model="password">
+      </md-input-container>
+      <md-input-container layout="row" layout-align="center">
+        <md-button class="md-primary md-raised" ng-click="getGame()">Get Game</md-button>
+      </md-input-container>
+      <div class="gameId">
+        {{ gameId }}
+      </div>
+    </div>
+
   </body>
 </html>

@@ -33,6 +33,9 @@
             <div class="box md-whiteframe-1dp" ng-repeat="box in row track by $index" ng-class="{ selected: matrix[placeholder][$index]}" ng-click="toggle(placeholder,$index)"></div>
           </div>
         </div>
+        <md-input-container layout="row" layout-align="center">
+          <md-button class="md-primary md-raised" ng-click="submit()">Submit</md-button>
+        </md-input-container>
     </div>
   </body>
 </html>
