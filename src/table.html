@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="MapUpload">
+  <head>
+    <meta charset="utf-8">
+    <title>map layout</title>
+    <!-- Angular-Meterial styles -->
+    <link rel="stylesheet" href="./vendors/angular-material.min.css">
+    <!-- my styles -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Angular -->
+    <script src="./vendors/angular.min.js"></script>
+    <script src="./vendors/angular-animate.min.js"></script>
+    <script src="./vendors/angular-aria.min.js"></script>
+    <script src="./vendors/angular-material.min.js"></script>
+    <script src="./vendors/angular-messages.min.js"></script>
+    <!-- mys js -->
+    <script src="./js/table.js"></script>
+  </head>
+  <body ng-controller="mainCtrl">
+    <table>
+      <thead>
+        <tr>
+          <th>Place</th>
+          <th>Player</th>
+          <th>Maps played</th>
+          <th>Maps to play</th>
+          <th>Total misses</th>
+          <th>Average misses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in table">
+          <td>{{ row.place }}</td>
+          <td>{{ row.player }}</td>
+          <td>{{ row.mapsPlayed }}</td>
+          <td>{{ row.mapsLeft }}</td>
+          <td>{{ row.totalMisses }}</td>
+          <td>{{ row.averageMisses}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
