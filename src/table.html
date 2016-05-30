@@ -17,27 +17,29 @@
     <script src="./js/table.js"></script>
   </head>
   <body ng-controller="mainCtrl">
-    <table>
-      <thead>
-        <tr>
-          <th>Place</th>
-          <th>Player</th>
-          <th>Maps played</th>
-          <th>Maps to play</th>
-          <th>Total misses</th>
-          <th>Average misses</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="row in table">
-          <td>{{ row.place }}</td>
-          <td>{{ row.player }}</td>
-          <td>{{ row.mapsPlayed }}</td>
-          <td>{{ row.mapsLeft }}</td>
-          <td>{{ row.totalMisses }}</td>
-          <td>{{ row.averageMisses}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="tableContainer" layout="column" layout-align="center-center">
+      <table class="md-whiteframe-5dp">
+        <thead>
+          <tr>
+            <th class="md-whiteframe-1dp">Place</th>
+            <th class="md-whiteframe-1dp">Player</th>
+            <th class="md-whiteframe-1dp">Maps played</th>
+            <th class="md-whiteframe-1dp">Maps to play</th>
+            <th class="md-whiteframe-1dp">Total misses</th>
+            <th class="md-whiteframe-1dp">Average misses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in table">
+            <td class="md-whiteframe-1dp">{{ row.place }}</td>
+            <td class="md-whiteframe-1dp">{{ row.player }}</td>
+            <td class="md-whiteframe-1dp">{{ row.mapsPlayed }}</td>
+            <td class="md-whiteframe-1dp">{{ row.mapsLeft }}</td>
+            <td class="md-whiteframe-1dp">{{ row.totalMisses }}</td>
+            <td class="md-whiteframe-1dp">{{ row.averageMisses}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

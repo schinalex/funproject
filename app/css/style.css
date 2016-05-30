@@ -11,3 +11,18 @@
 
 .gameId {
   margin: 2em; }
+
+.tableContainer {
+  /*height: 100vh;*/
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+
+th {
+  padding: 1em; }
+
+td {
+  text-align: center; }
+/*
+table {
+  border-style: solid; }*/
