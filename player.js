@@ -41,65 +41,33 @@ const checkIfHit = (obj) => {
   })
   return hit
 }
-
-const randomNumber = () => Math.floor(Math.random() * 10)
-
-const testRandom = () => {
-  if (randomNumber() < 10) {
-    
-  }
-}
-
-const getCoordinates = () => {
-  let x = randomNumber()
-  let y = randomNumber()
-  return {x: x, y: y}
-}
-
-const checkIfAlreadyShot = (obj, shots) => {
-  let shot = false
-  for (let point of shots) {
-    if (point.x === obj.x && point.y === obj.x) {
-      shot = true
+const initializePoints = () => {
+  let points = []
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      points.push({ x: j, y: i })
     }
   }
-  return shot
+  return points
 }
-
-// const shoot = (obj, shots) => {
-//   if (checkIfAlreadyShot(obj, shots)) {
-//     return shoot(getCoordinates(), shots)
-//   } else {
-//     shots.push(obj)
-//     return checkIfHit(obj)
-//   }
-// }
-
-const shoot = (shots) => {
-  var coordinates = {}
-  for (var alreadyShot = true; alreadyShot === true; alreadyShot = checkIfAlreadyShot(coordinates, shots)) {
-    coordinates = getCoordinates()
-  }
-  shots.push(coordinates)
-  return checkIfHit(coordinates)
+const getRandomNumber = (n) => Math.floor(Math.random() * n)
+const getRandomPoint = (points) => points.splice(getRandomNumber(points.length), 1)[0]
+const shoot = (points) => {
+  let randomPoint = getRandomPoint(points)
+  console.log(randomPoint)
+  return checkIfHit(randomPoint)
 }
-
 const play = (n) => {
-  let shots = []
-  let c = 0
-  for (let i = 0; i < n; i++) {
-    let hit = shoot(shots)
+  let points = initializePoints()
+  for (let i = 0, c = 0; i < n && c < 20; i++) {
+    console.log('iterration : ' + i)
+    let hit = shoot(points)
     if (hit) {
       c++
+      console.log('c = ' + c)
     }
-    console.log(shots[shots.length - 1])
     console.log(hit)
   }
-  console.log(c)
-  // console.log(shots)
-  console.log(shots.length)
 }
 
 play(100)
-console.log(getCoordinates())
-console.log(shoot([]))
