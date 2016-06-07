@@ -57,9 +57,9 @@ const shoot = (points) => {
   console.log(randomPoint)
   return checkIfHit(randomPoint)
 }
-const play = (n) => {
+const play = () => {
   let points = initializePoints()
-  for (let i = 0, c = 0; i < n && c < 20; i++) {
+  for (let i = 0, c = 0; i < 100 && c < 20; i++) {
     console.log('iterration : ' + i)
     let hit = shoot(points)
     if (hit) {
@@ -70,4 +70,4 @@ const play = (n) => {
   }
 }
 
-play(100)
+play()
